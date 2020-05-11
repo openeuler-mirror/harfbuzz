@@ -1,14 +1,14 @@
 Name:           harfbuzz
-Version:        1.8.7
-Release:        2
+Version:        2.6.1
+Release:        1
 Summary:        A text shaping engine
 
 License:        MIT
 URL:            https://harfbuzz.github.io/what-is-harfbuzz.html
-Source0:        https://github.com/harfbuzz/harfbuzz/releases/tag/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/harfbuzz/harfbuzz/releases/tag/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc-c++ freetype-devel cairo-devel glib2-devel graphite2-devel
-BuildRequires:  gtk-doc libicu-devel
+BuildRequires:  gtk-doc libicu-devel gobject-introspection-devel
 Provides:       harfbuzz-icu
 Obsoletes:      harfbuzz-icu
 
@@ -25,19 +25,20 @@ Requires:       %{name} = %{version}-%{release}
 
 %description    devel
 Header files and libraries for building a extension library for %{name}.
+
 %package_help
 
 %prep
 %autosetup -n %{name}-%{version} -p1
 
 %build
-%configure  --with-graphite2 --enable-static
-%disable_rpath
+%configure  --disable-static --with-graphite2 --with-gobject --enable-introspection
 
 make %{?_smp_mflags}
 
+
 %install
-make install DESTDIR=%{buildroot} INSTALL="install -p"
+make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %delete_la
 
 %ldconfig_scriptlets
@@ -47,20 +48,27 @@ make install DESTDIR=%{buildroot} INSTALL="install -p"
 %license COPYING
 %{_libdir}/libharfbuzz.so.*
 %{_libdir}/libharfbuzz-subset.so.*
+%{_libdir}/libharfbuzz-gobject.so.0*
 %{_libdir}/libharfbuzz-icu.so.*
+%dir %{_libdir}/girepository-1.0
+%{_libdir}/girepository-1.0/HarfBuzz-0.0.typelib
 
 %files devel
+%{_bindir}/*
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/*.pc
-%{_libdir}/cmake/harfbuzz/harfbuzz-config.cmake
+%{_libdir}/cmake/harfbuzz/
 %{_includedir}/harfbuzz/
-%{_bindir}/*
-%{_libdir}/*.a
 
 %files help
 %doc  README
+%dir %{_datadir}/gir-1.0
 %{_datadir}/gtk-doc/html/harfbuzz/*
+%{_datadir}/gir-1.0/HarfBuzz-0.0.gir
 
 %changelog
+* Tue Apr 14 2020 zhangrui <zhangrui182@huawei.com> - 2.6.1-1
+- Update to 2.6.1
+
 * Mon Aug 26 2019 openEuler Buildteam <buildteam@openeuler.org> - 1.8.7-2
 - Package Init
