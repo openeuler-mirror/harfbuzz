@@ -1,5 +1,5 @@
 Name:           harfbuzz
-Version:        2.6.1
+Version:        2.6.8
 Release:        1
 Summary:        A text shaping engine
 
@@ -67,6 +67,9 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %{_datadir}/gir-1.0/HarfBuzz-0.0.gir
 
 %changelog
+* Fri Jul 18 2020 hanhui <hanhui15@huawei.com> - 2.6.8-1
+- Update to 2.6.8
+
 * Mon Jun 15 2020 hanhui <hanhui15@huawei.com> - 2.6.1-1
 - Update to 2.6.1
 
