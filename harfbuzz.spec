@@ -1,6 +1,6 @@
 Name:           harfbuzz
 Version:        2.6.8
-Release:        1
+Release:        2
 Summary:        A text shaping engine
 
 License:        MIT
@@ -59,14 +59,17 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/cmake/harfbuzz/
 %{_includedir}/harfbuzz/
+%dir %{_datadir}/gir-1.0
+%{_datadir}/gir-1.0/HarfBuzz-0.0.gir
 
 %files help
 %doc  README
-%dir %{_datadir}/gir-1.0
 %{_datadir}/gtk-doc/html/harfbuzz/*
-%{_datadir}/gir-1.0/HarfBuzz-0.0.gir
 
 %changelog
+* Wed Jul 29 2020 hanhui <hanhui15@huawei.com> - 2.6.8-2
+- modify HarfBuzz-0.0.gir patch
+
 * Fri Jul 18 2020 hanhui <hanhui15@huawei.com> - 2.6.8-1
 - Update to 2.6.8
 
