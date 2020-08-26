@@ -1,5 +1,5 @@
 Name:           harfbuzz
-Version:        2.6.1
+Version:        2.6.8
 Release:        1
 Summary:        A text shaping engine
 
@@ -59,15 +59,18 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/cmake/harfbuzz/
 %{_includedir}/harfbuzz/
+%dir %{_datadir}/gir-1.0
+%{_datadir}/gir-1.0/HarfBuzz-0.0.gir
 
 %files help
 %doc  README
-%dir %{_datadir}/gir-1.0
 %{_datadir}/gtk-doc/html/harfbuzz/*
-%{_datadir}/gir-1.0/HarfBuzz-0.0.gir
 
 %changelog
-* Tue Apr 14 2020 zhangrui <zhangrui182@huawei.com> - 2.6.1-1
+* Wed Aug 26 2020 chengguipeng<chengguipeng1@huawei.com> - 2.6.8-1
+- Update to 2.6.8
+
+* Mon Jun 15 2020 hanhui <hanhui15@huawei.com> - 2.6.1-1
 - Update to 2.6.1
 
 * Mon Aug 26 2019 openEuler Buildteam <buildteam@openeuler.org> - 1.8.7-2
