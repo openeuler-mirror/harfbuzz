@@ -67,7 +67,7 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %{_datadir}/gtk-doc/html/harfbuzz/*
 
 %changelog
-* Tue Sep 10 2020 chengguipeng<chengguipeng1@openeuler.org> - 2.6.8-2
+* Tue Sep 10 2020 chengguipeng<chengguipeng1@huawei.com> - 2.6.8-2
 - Type:bugfix
 - ID:NA
 - SUG:NA
