@@ -1,12 +1,14 @@
 Name:           harfbuzz
 Version:        2.6.8
-Release:        2
+Release:        3
 Summary:        A text shaping engine
 
 License:        MIT
 URL:            https://harfbuzz.github.io/what-is-harfbuzz.html
 Source0:        https://github.com/harfbuzz/harfbuzz/releases/tag/%{name}-%{version}.tar.xz
 
+Patch6000:	bugfix-large-loop-in-trySubset.patch
+	
 BuildRequires:  gcc-c++ freetype-devel cairo-devel glib2-devel graphite2-devel
 BuildRequires:  gtk-doc libicu-devel gobject-introspection-devel
 Provides:       harfbuzz-icu
@@ -67,6 +69,9 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %{_datadir}/gtk-doc/html/harfbuzz/*
 
 %changelog
+* Wed Sep 23 2020 yanglu <yanglu60@huawei.com> - 2.6.8-3
+- fix large loop in trySubset
+
 * Wed Jul 29 2020 hanhui <hanhui15@huawei.com> - 2.6.8-2
 - modify HarfBuzz-0.0.gir patch
 

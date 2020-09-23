@@ -1,0 +1,104 @@
+From 73963d4a4ac8129cbc8f0f8f900912378f71db5a Mon Sep 17 00:00:00 2001
+From: Qunxin Liu <qxliu@google.com>
+Date: Tue, 22 Sep 2020 22:02:58 +0800
+Subject: [PATCH] [subset] call collect_mapping only when --gids option is
+ used.
+
+---
+ src/hb-ot-cmap-table.hh | 12 +++++++-----
+ src/hb-ot-os2-table.hh  | 43 +++++++++++++++++++++++------------------
+ 2 files changed, 31 insertions(+), 24 deletions(-)
+
+diff --git a/src/hb-ot-cmap-table.hh b/src/hb-ot-cmap-table.hh
+index c42f3fd..fdaef29 100644
+--- a/src/hb-ot-cmap-table.hh
++++ b/src/hb-ot-cmap-table.hh
+@@ -1360,14 +1360,14 @@ struct cmap
+ 
+     for (const EncodingRecord& _ : encodingrec_iter)
+     {
+-      hb_set_t unicodes_set;
+-      hb_map_t cp_glyphid_map;
+-      (base+_.subtable).collect_mapping (&unicodes_set, &cp_glyphid_map);
+-
+       unsigned format = (base+_.subtable).u.format;
+       if (!plan->glyphs_requested->is_empty ())
+       {
+-        auto table_iter =
++	hb_set_t unicodes_set;
++        hb_map_t cp_glyphid_map;
++        (base+_.subtable).collect_mapping (&unicodes_set, &cp_glyphid_map);
++        
++	auto table_iter =
+         + hb_zip (unicodes_set.iter(), unicodes_set.iter() | hb_map(cp_glyphid_map))
+         | hb_filter (plan->_glyphset, hb_second)
+         | hb_filter ([plan] (const hb_pair_t<hb_codepoint_t, hb_codepoint_t>& p)
+@@ -1389,6 +1389,8 @@ struct cmap
+        * all codepoints in each subtable, which is more efficient */
+       else
+       {
++	hb_set_t unicodes_set;
++        (base+_.subtable).collect_unicodes (&unicodes_set);
+         if (format == 4) c->copy (_, + it | hb_filter (unicodes_set, hb_first), 4u, base, plan, &format4objidx);
+         else if (format == 12) c->copy (_, + it | hb_filter (unicodes_set, hb_first), 12u, base, plan, &format12objidx);
+         else if (format == 14) c->copy (_, it, 14u, base, plan, &format14objidx);
+diff --git a/src/hb-ot-os2-table.hh b/src/hb-ot-os2-table.hh
+index f538fd4..757c83b 100644
+--- a/src/hb-ot-os2-table.hh
++++ b/src/hb-ot-os2-table.hh
+@@ -174,28 +174,33 @@ struct OS2
+     if (unlikely (!os2_prime)) return_trace (false);
+ 
+     hb_set_t unicodes;
+-    hb_map_t unicode_glyphid_map;
+-    
+-    OT::cmap::accelerator_t cmap;
+-    cmap.init (c->plan->source);
+-    cmap.collect_mapping (&unicodes, &unicode_glyphid_map);
+-    cmap.fini ();
+-    
+-    if (c->plan->unicodes->is_empty ()) unicodes.clear ();
+-    else hb_set_set (&unicodes, c->plan->unicodes);
+-
+-    + unicode_glyphid_map.iter ()
+-    | hb_filter (c->plan->glyphs_requested, hb_second)
+-    | hb_map (hb_first)
+-    | hb_sink (unicodes)
+-    ;
++    if (!c->plan->glyphs_requested->is_empty ())
++    {
++      hb_map_t unicode_glyphid_map;
++
++      OT::cmap::accelerator_t cmap;
++      cmap.init (c->plan->source);
++      cmap.collect_mapping (&unicodes, &unicode_glyphid_map);
++      cmap.fini ();
++
++      if (c->plan->unicodes->is_empty ()) unicodes.clear ();
++      else hb_set_set (&unicodes, c->plan->unicodes);
++
++      + unicode_glyphid_map.iter ()
++      | hb_filter (c->plan->glyphs_requested, hb_second)
++      | hb_map (hb_first)
++      | hb_sink (unicodes)
++      ;
++    }
++    /* when --gids option is not used, no need to do collect_mapping that is
++       * iterating all codepoints in each subtable, which is not efficient */
+     uint16_t min_cp, max_cp;
+-    find_min_and_max_codepoint (&unicodes, &min_cp, &max_cp);
++    find_min_and_max_codepoint (unicodes.is_empty () ? c->plan->unicodes : &unicodes, &min_cp, &max_cp);
+     os2_prime->usFirstCharIndex = min_cp;
+     os2_prime->usLastCharIndex = max_cp;
+-
+-    _update_unicode_ranges (&unicodes, os2_prime->ulUnicodeRange);
+-
++	
++    _update_unicode_ranges (unicodes.is_empty () ? c->plan->unicodes : &unicodes, os2_prime->ulUnicodeRange);
++    
+     return_trace (true);
+   }
+ 
+-- 
+2.23.0
+
