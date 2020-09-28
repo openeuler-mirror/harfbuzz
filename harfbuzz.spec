@@ -1,11 +1,11 @@
 Name:           harfbuzz
 Version:        2.6.8
-Release:        2
+Release:        3
 Summary:        A text shaping engine
 
 License:        MIT
 URL:            https://harfbuzz.github.io/what-is-harfbuzz.html
-Source0:        https://github.com/harfbuzz/harfbuzz/releases/tag/%{name}-%{version}.tar.xz
+Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/2.6.8/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc-c++ freetype-devel cairo-devel glib2-devel graphite2-devel
 BuildRequires:  gtk-doc libicu-devel gobject-introspection-devel
@@ -67,6 +67,12 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %{_datadir}/gtk-doc/html/harfbuzz/*
 
 %changelog
+* Tue Sep 10 2020 chengguipeng<chengguipeng1@huawei.com> - 2.6.8-2
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:modify source0 url
+
 * Wed Jul 29 2020 hanhui <hanhui15@huawei.com> - 2.6.8-2
 - modify HarfBuzz-0.0.gir patch
 
