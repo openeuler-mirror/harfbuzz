@@ -1,6 +1,6 @@
 Name:           harfbuzz
-Version:        2.6.8
-Release:        3
+Version:        2.7.4
+Release:        1
 Summary:        A text shaping engine
 
 License:        MIT
@@ -67,6 +67,9 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %{_datadir}/gtk-doc/html/harfbuzz/*
 
 %changelog
+* Thu Jan 28 2021 zhanzhimin <zhanzhimin@huawei.com> - 2.7.4-1
+- update to 2.7.4
+
 * Tue Sep 10 2020 chengguipeng<chengguipeng1@huawei.com> - 2.6.8-2
 - Type:bugfix
 - ID:NA
