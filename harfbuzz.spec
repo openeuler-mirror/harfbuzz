@@ -1,6 +1,6 @@
 Name:           harfbuzz
 Version:        2.8.1
-Release:        1
+Release:        2
 Summary:        A text shaping engine
 
 License:        MIT
@@ -36,6 +36,9 @@ Header files and libraries for building a extension library for %{name}.
 
 make %{?_smp_mflags}
 
+%check
+make check
+
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %delete_la
@@ -66,6 +69,9 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %{_datadir}/gtk-doc/html/harfbuzz/*
 
 %changelog
+* Mon Jul 05 2021 wangkerong <wangkerong@huawei.com> - 2.8.1-2
+- enable make check
+
 * Fri Jun 25 2021 wangkerong <wangkerong@huawei.com> - 2.8.1-1
 - update to 2.8.1
 
