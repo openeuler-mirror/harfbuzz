@@ -1,5 +1,5 @@
 Name:           harfbuzz
-Version:        2.8.2
+Version:        4.2.0
 Release:        1
 Summary:        A text shaping engine
 
@@ -69,6 +69,9 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %{_datadir}/gtk-doc/html/harfbuzz/*
 
 %changelog
+* Sat Apr 2 2022 misaka00251 <misaka00251@misakanet.cn> - 4.2.0-1
+- Upgrade package version to 4.2.0
+
 * Fri Dec 03 2021 liuyumeng <liuyumeng5@huawei.com> - 2.8.2-1
 - update to harfbuzz-2.8.2-1
 
